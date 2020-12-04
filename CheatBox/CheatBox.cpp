@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 	SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
 	std::wstring procName;
-	const char* dllPath = NULL;
+	LPSTR dllPath = NULL;
 
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 		procName = converter.from_bytes(argv[1]);
 		if (argc > 2)
 		{
-			dllPath = argv[2];
+			dllPath = _fullpath(dllPath, argv[2], _MAX_PATH);
 		}
 	}
 
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 
 		SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY);
 		getline(std::cin, temp1);
-
+		
 		procName = converter.from_bytes(temp1);
 	}
 
@@ -118,14 +118,13 @@ int main(int argc, char* argv[])
 	SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
 	if (dllPath == NULL) {
-
 		std::string temp2;
 		std::cout << "Enter dll Path:" << std::endl;
 
 		SetConsoleTextAttribute(hConsole, FOREGROUND_INTENSITY);
 		getline(std::cin, temp2);
 
-		dllPath = temp2.c_str();
+		dllPath = _fullpath(dllPath, temp2.c_str(), _MAX_PATH);
 	}
 
 	if (fileExists(dllPath))
